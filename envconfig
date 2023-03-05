@@ -1,0 +1,5 @@
+HASURA_HTTP_URL = "http://3.1.204.87:8080/v1/graphql"
+HASURA_ADMIN_SECRET = "xg00k!01tTp@"
+HASURA_JWT_SECRET_KEY = "t3&Ya#4OWtZJWvV70Zth71ZbFBW#tE7qURhhF&6D#UZT0zvjGT"
+PORT = 3000
+# please delete after build #
