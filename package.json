@@ -2,10 +2,10 @@
   "name": "fleet-v2-server",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.ts",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.ts",
+    "start": "nodemon index.ts",
     "build": "npm run clean && mkdir dist && babel server -s -d dist"
   },
   "repository": {

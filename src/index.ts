@@ -6,12 +6,9 @@ import { generateJWT } from "./jwt";
 
 import './dotenv';
 
-const app = express();
-const port = process.env.PORT || 3000;
+const app = express.Router();
 
-// Parse JSON in request bodies
-app.use(express.json());
-app.post("/auth/register", async (req: Request, res: Response) => {
+app.post("/register", async (req: Request, res: Response) => {
     const { email, password, role } = req.body as Record<string, string>;
   
     // In production app, you would check if user is already registered
@@ -50,8 +47,10 @@ app.post("/auth/register", async (req: Request, res: Response) => {
     });
   });
 
-  app.post("/auth/login", async (req: Request, res: Response) => {
+  app.post("/login", async (req: Request, res: Response) => {
     const { email, password } = req.body as Record<string, string>;
+    console.log(req.body);
+    
   
     //@ts-ignore
     let { user } = await client.request(
@@ -94,7 +93,4 @@ app.post("/auth/register", async (req: Request, res: Response) => {
       res.sendStatus(401);
     }
   });
-
-app.listen(port, () => {
-  console.log(`Auth server running on port ${port}.`);
-});
+export default app
