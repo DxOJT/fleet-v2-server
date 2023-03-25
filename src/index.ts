@@ -83,7 +83,6 @@ app.post('/login', async (req: Request, res: Response) => {
 
   // Since we filtered on a non-primary key we got an array back
   user = user[0];
-  console.log(user);
 
   if (!user) {
     res.sendStatus(401);
