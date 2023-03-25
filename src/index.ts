@@ -9,7 +9,7 @@ import './dotenv';
 const app = express.Router();
 
 app.post('/register', async (req: Request, res: Response) => {
-  const { email, password, role } = req.body as Record<string, string>;
+  const { email, password, role, employee_id } = req.body as Record<string, string>;
 
   // In production app, you would check if user is already registered
   // We skip that in this tutorial for the sake of time
@@ -26,6 +26,7 @@ app.post('/register', async (req: Request, res: Response) => {
           employee_id
           userEmployee {
             first_name
+            middle_name
             last_name
           }
         }
@@ -36,6 +37,7 @@ app.post('/register', async (req: Request, res: Response) => {
         email,
         password: await bcrypt.hash(password, 10),
         role,
+        employee_id,
       },
     },
   );
@@ -49,6 +51,7 @@ app.post('/register', async (req: Request, res: Response) => {
       otherClaims: {
         'X-Hasura-User-Id': user.id,
         employeeFirstName: user.userEmployee.first_name,
+        employeeMiddleName: user.userEmployee.middle_name,
         employeeLastName: user.userEmployee.last_name,
         employeeId: user.employee_id,
       },
@@ -71,6 +74,7 @@ app.post('/login', async (req: Request, res: Response) => {
           employee_id
           userEmployee {
             first_name
+            middle_name
             last_name
           }
         }
@@ -100,6 +104,7 @@ app.post('/login', async (req: Request, res: Response) => {
         otherClaims: {
           'X-Hasura-User-Id': user.id,
           employeeFirstName: user.userEmployee.first_name,
+          employeeMiddleName: user.userEmployee.middle_name,
           employeeLastName: user.userEmployee.last_name,
           employeeId: user.employee_id,
         },
