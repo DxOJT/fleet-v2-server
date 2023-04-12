@@ -5,19 +5,20 @@ import { client } from './client';
 import { generateJWT } from './jwt';
 
 import './dotenv';
+import authenticateToken from './middlewares/auth';
 
 const app = express.Router();
 
-app.post('/register', async (req: Request, res: Response) => {
+app.post('/register', authenticateToken, async (req: Request, res: Response) => {
   const { email, password, role, employee_id } = req.body as Record<string, string>;
-
+   
   // In production app, you would check if user is already registered
   // We skip that in this tutorial for the sake of time
 
   // We insert the user using a mutation
   // Note that we salt and hash the password using bcrypt
   // @ts-ignore
-  const { insert_user_one } = await client.request(
+  await client.request(
     gql`
       mutation registerUser($user: user_insert_input!) {
         insert_user_one(object: $user) {
@@ -42,20 +43,20 @@ app.post('/register', async (req: Request, res: Response) => {
     },
   );
 
-  const user = insert_user_one;
-
   res.send({
-    token: generateJWT({
-      defaultRole: user.role,
-      allowedRoles: [user.role],
-      otherClaims: {
-        'X-Hasura-User-Id': user.id,
-        employeeFirstName: user.userEmployee.first_name,
-        employeeMiddleName: user.userEmployee.middle_name,
-        employeeLastName: user.userEmployee.last_name,
-        employeeId: user.employee_id,
-      },
-    }),
+    email,
+    password,
+    // token: generateJWT({
+    //   defaultRole: user.role,
+    //   allowedRoles: [user.role],
+    //   otherClaims: {
+    //     'X-Hasura-User-Id': user.id,
+    //     employeeFirstName: user.userEmployee.first_name,
+    //     employeeMiddleName: user.userEmployee.middle_name,
+    //     employeeLastName: user.userEmployee.last_name,
+    //     employeeId: user.employee_id,
+    //   },
+    // }),
   });
 });
 
