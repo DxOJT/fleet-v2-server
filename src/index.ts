@@ -45,7 +45,6 @@ app.post('/register', authenticateToken, async (req: Request, res: Response) => 
 
   res.send({
     email,
-    password,
     // token: generateJWT({
     //   defaultRole: user.role,
     //   allowedRoles: [user.role],
@@ -57,6 +56,38 @@ app.post('/register', authenticateToken, async (req: Request, res: Response) => 
     //     employeeId: user.employee_id,
     //   },
     // }),
+  });
+});
+
+app.put('/updateUser', authenticateToken, async (req: Request, res: Response) => {
+  const { password, userId } = req.body as Record<string, string>;
+   
+  // In production app, you would check if user is already registered
+  // We skip that in this tutorial for the sake of time
+
+  // We insert the user using a mutation
+  // Note that we salt and hash the password using bcrypt
+  // @ts-ignore
+  await client.request(
+    gql`
+      mutation MyMutation($id: uuid!, $password: String!) {
+        update_user_by_pk(pk_columns: {id: $id}, _set: {password: $password}) {
+          password
+          email
+          employee_id
+          id
+          role
+        }
+      }
+    `,
+    {
+      $id: userId,
+      password: await bcrypt.hash(password, 10),
+    },
+  );
+
+  res.send({
+    userId,
   });
 });
 
