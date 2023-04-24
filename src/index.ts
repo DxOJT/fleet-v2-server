@@ -81,7 +81,7 @@ app.post('/updateUser', authenticateToken, async (req: Request, res: Response) =
       }
     `,
     {
-      $id: userId,
+      id: userId,
       password: await bcrypt.hash(password, 10),
     },
   );
