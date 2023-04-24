@@ -59,7 +59,7 @@ app.post('/register', authenticateToken, async (req: Request, res: Response) => 
   });
 });
 
-app.put('/updateUser', authenticateToken, async (req: Request, res: Response) => {
+app.post('/updateUser', authenticateToken, async (req: Request, res: Response) => {
   const { password, userId } = req.body as Record<string, string>;
    
   // In production app, you would check if user is already registered
